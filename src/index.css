@@ -36,7 +36,10 @@ code {
   border-radius: 4px;
   box-sizing: border-box;
   position: absolute;
+  top: var(--top);
+  left: var(--left);
 }
+
 .box-selected{
   border: 2px solid black;
   z-index: 10;
