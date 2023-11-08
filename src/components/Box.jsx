@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import finalPropsSelectorFactory from 'react-redux/es/connect/selectorFactory';
 
 function Box(props) {
     const ref = useRef(null);
