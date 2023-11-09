@@ -1,7 +1,4 @@
 import './App.css';
-import Box1 from './components/Box1';
-import Box2 from "./components/Box2"
-import Box3 from "./components/Box3"
 import DraggableWhitespace from './components/Whitespace';
 import { useEffect, useRef, useState } from 'react';
 
@@ -34,6 +31,7 @@ function App() {
   
   const inputX = useRef(null);
   const inputY = useRef(null);
+  const inputZ = useRef(null);
 
 
   const handleSubmit = (e) => {
@@ -41,19 +39,43 @@ function App() {
     if (inputX && inputY){
       const x = parseFloat(inputX.current.value);
       const y = parseFloat(inputY.current.value);
+      const z = parseFloat(inputZ.current.value);
       if (x && y){
         setCoors(prev => prev.map(coor => (coor.id===currentSelected.id ? {
           ...coor,
           x: x,
-          y: y
+          y: y,
+          z: z
         } : coor)))
       }
     }
   }
+  const changeZValue = (isUp) => {
+    let z = parseInt(inputZ.current.value);
+    console.log(z);
+    if (isUp){
+      if (z<10) z = z+1;
+    }
+    else{
+      if (z>0) z = z-1;
+    }
+    console.log(z);
+    inputZ.current.value = z;
+  }
+
 
   useEffect(() => {
-    // if (inputX) inputX.current.value = currentSelected?.x || 0;
-    // if (inputY) inputY.current.value = currentSelected?.y || 0;
+    // SET VALUE FOR TWO INPUT BOX TO SHOW THE CURRENT POSTION OF AN ELEMENT
+
+    if (currentSelected){
+      inputX.current.value = currentSelected?.x || 0;
+      inputY.current.value = currentSelected?.y || 0;
+      inputZ.current.value = currentSelected?.z || 0;
+    } 
+    // if (inputY) 
+    // document.querySelector(".input1").value = currentSelected?.x || 0;
+    // document.querySelector('.input2').value = currentSelected?.y || 0;
+    // document.querySelector('.input3').value = currentSelected?.z || -1;
   }, [coors])
  
   return (
@@ -63,46 +85,53 @@ function App() {
           coors={coors}
           setCoors={setCoors}
         ></DraggableWhitespace>
-        {/* Form Info */}
-        <form
-          action=""
-          className="d-inline-block border border-secondary p-3 mx-1"
-          onSubmit={(event) => handleSubmit(event)}
-        >
-          <strong className="d-block">
-            Selected:{" "}
-            {currentSelected ? "Drag me " + currentSelected?.id : "None"}{" "}
-          </strong>
-          {currentSelected && (
-            <>
-              <label htmlFor="x" className="form-label">
-                X
-              </label>
-              <input
-                type="text"
-                ref={inputX}
-                name="x"
-                className="form-control"
-              />
-              <label htmlFor="y" className="form-label">
-                Y
-              </label>
-              <input
-                type="text"
-                ref={inputY}
-                name="y"
-                className="form-control"
-              />
-              <button className="btn btn-primary mt-2" type="submit">
-                Confirm
-              </button>
-              {/* <div className='d-flex'>
-                <button className="btn btn-primary up">Up</button>
-                <button className="btn btn-primary down">Down</button>
-              </div> */}
-            </>
-          )}
-        </form>
+        {/* Info Board */}
+        <div>
+          {/* X, Y Info */}
+          <form
+            action=""
+            className="d-inline-block border border-secondary p-3 mx-1"
+            onSubmit={(event) => handleSubmit(event)}
+          >
+            <strong className="d-block">
+              Selected:{" "}
+              {currentSelected ? "Drag me " + currentSelected?.id : "None"}{" "}
+            </strong>
+            {currentSelected && (
+              <>
+                <label htmlFor="x" className="form-label">
+                  X
+                </label>
+                <input
+                  type="text"
+                  ref={inputX}
+                  name="x"
+                  className="form-control input1"
+                />
+                <label htmlFor="y" className="form-label">
+                  Y
+                </label>
+                <input
+                  type="text"
+                  ref={inputY}
+                  name="y"
+                  className="form-control input2"
+                />
+                {/* Z-index and layering  */}
+                <label htmlFor="" className="form-label">Z</label>
+                <input ref={inputZ} type="text" className="form-control input3" name='z' readOnly/>
+                <div className='d-flex justify-content-center mt-2'>
+                  <button className="btn btn-primary me-2" onClick={() => changeZValue(true)}>Up</button>
+                  <button className="btn btn-primary" onClick={() => changeZValue(false)}>Down</button>
+                </div>
+                {/* Submit button */}
+                <button className="btn btn-primary mt-2" type="submit">
+                  Confirm
+                </button>
+              </>
+            )}
+          </form>
+        </div>
       </div>
 
       <button

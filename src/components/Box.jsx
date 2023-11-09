@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 
 function Box(props) {
+    const style ={
+      zIndex: props.coor.z
+    }
     const ref = useRef(null);
     useEffect(() => {
       // console.log('re-effect', props.coor.x)
@@ -19,7 +22,7 @@ function Box(props) {
     const handleMouseDown = (e) => {
         // Select the box
         ref.current.classList.add("box-selected");
-        const ratio = window.devicePixelRatio;
+        const ratio = 1;
         const startMouseX = e.clientX;
         const startMouseY = e.clientY;
         const startX = getRef('--left');
@@ -76,6 +79,7 @@ function Box(props) {
     <div
       ref={ref}
       className={`bg-primary text-center box ${props.coor.isSelected && "box-selected"}`}
+      style={style}
     >
       Drag Me {props.coor.id}
     </div>
