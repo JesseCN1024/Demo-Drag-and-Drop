@@ -28,8 +28,6 @@ code {
   z-index: 1;
 }
 .box{
-  width: 60px;
-  height: 50px;
   color: white;
   font-weight: 700;
   cursor:grab;
@@ -37,11 +35,89 @@ code {
   border-radius: 4px;
   box-sizing: border-box;
   position: absolute;
-  top: var(--top);
-  left: var(--left);
+  transform: translate(var(--left), var(--top));
+  transform-origin: bottom left;
 }
 
 .box-selected{
-  border: 2px solid black;
   /* z-index: 10; */
+}
+
+.coordinate{
+  position: absolute;
+  left: -20px;
+  bottom: -20px;
+  width: 20px;
+  height: 20px;
+}
+.coordinate-x,.coordinate-y{
+  position: absolute;
+  width: 510px;
+  height: 30px;
+  transform-origin: left center;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+}
+.arrow {
+  width: 510px;
+  height: 2px;
+  background-color: gray;
+  position: absolute;
+}
+.arrow i{
+  color: gray;
+  left: 0;
+  right: 0;
+}
+.coordinate-vertical{
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+
+.resizer{
+  position: absolute;
+  background-color: black;
+}
+
+.resizer-left{
+  width: 3px;
+  height: 100%;
+  cursor:col-resize;
+}
+.resizer-right{
+  width: 3px;
+  height: 100%;
+  cursor:col-resize;
+}
+.resizer-top{
+  height: 3px;
+  width: 100%;
+  cursor: row-resize;
+}
+.resizer-bottom{
+  height: 3px;
+  width: 100%;
+  cursor: row-resize;
+}
+.round-resizer {
+  width: .5rem;
+  /* padding-top: 100%; */
+  height: .5rem;
+  border-radius: 50%;
+}
+.resizer-topleft{
+  cursor: nwse-resize;
+} 
+
+.resizer-topright{
+  cursor: nesw-resize;
+} 
+.resizer-bottomleft{
+  cursor: nesw-resize;
+
+}
+.resizer-bottomright{
+  cursor: nwse-resize;
+
 }
