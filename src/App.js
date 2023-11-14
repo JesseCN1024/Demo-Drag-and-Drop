@@ -49,6 +49,8 @@ function App() {
   const inputX = useRef(null);
   const inputY = useRef(null);
   const inputZ = useRef(null);
+  const inputW = useRef(null);
+  const inputH = useRef(null);
 
   // FUNCTIONS
   const updateCoors = (id, values, syncValues) => {
@@ -67,12 +69,12 @@ function App() {
       const x = parseFloat(inputX.current.value)/ratio.x;
       const y = parseFloat(inputY.current.value)/ratio.y;
       const z = parseFloat(inputZ.current.value);
+      const dw = parseFloat(inputW.current.value);
+      const dh = parseFloat(inputH.current.value);
       if (x && y){
         setCoors(prev => prev.map(coor => (coor.id===currentSelected.id ? {
           ...coor,
-          x: x,
-          y: y,
-          z: z  
+          x, y, z, dw, dh
         } : coor)))
       }
     }
@@ -97,6 +99,8 @@ function App() {
       inputX.current.value = ((currentSelected?.x || 0)*ratio.x).toFixed(4);
       inputY.current.value = ((currentSelected?.y || 0)*ratio.y).toFixed(4);
       inputZ.current.value = currentSelected?.z || 0;
+      inputW.current.value = currentSelected?.dw;
+      inputH.current.value = currentSelected?.dh;
     } 
   }, [coors])
  
@@ -150,10 +154,18 @@ function App() {
                   <div className="btn btn-primary" onClick={(event) => changeZValue(event,false)}>Down</div>
                 </div>
                 {/* Width and Height %*/}
-                <label className='mt-2'>Default Width: {currentSelected.dw}px - 100%</label>
-                <input type="text" className="form-control input3" readOnly value={`${currentSelected.w * 100/ currentSelected.dw}%`}/>
-                <label className='mt-2'>Default Height: {currentSelected.dh}px - 100%</label>
-                <input type="text" className="form-control input3" readOnly value={`${currentSelected.h * 100/ currentSelected.dh}%`}/>
+                <label className='mt-2'>Default Width</label>
+                <div className="d-flex align-items-center">
+                  <input type="text" ref={inputW} className="form-control w-50"/>
+                  <span className='ms-2'> ~ 100% </span>
+                </div>
+                <input type="text" className="form-control input3" readOnly value={`${currentSelected.w * 100 / currentSelected.dw}%`}/>
+                <label className='mt-2'>Default Height</label>
+                <div className="d-flex align-items-center">
+                  <input type="text" ref={inputH} className="form-control w-50"/>
+                  <span className='ms-2'> ~ 100% </span>
+                </div>
+                <input type="text" className="form-control input3" readOnly value={`${currentSelected.h * 100 / currentSelected.dh}%`}/>
 
                 {/* Submit button */}
                 <button className="btn btn-primary mt-2" type="submit">
