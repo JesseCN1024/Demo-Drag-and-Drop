@@ -1,13 +1,20 @@
+import React, {componentDidMount} from 'react';
 import './App.css';
 import DraggableWhitespace from './components/Whitespace';
 import { useEffect, useRef, useState } from 'react';
+import Resizable from './components/Resizeable';
 
 function App() {
+  // STATES AND VARIABLES
+  const coorRatio = { x: 100, y: 80 };
+  const [ratio, setRatio] = React.useState({x: 0, y:0});
   const [coors, setCoors] = useState([
     {
       id: 1,
       x: 0,
       y: 0,
+      w: 60,
+      h: 50,
       isSelected: false,
       z: 0
     },
@@ -15,6 +22,8 @@ function App() {
       id: 2,
       x: 20,
       y: 20,
+      w: 60,
+      h: 50,
       isSelected: false,
       z: 0
     },
@@ -22,10 +31,13 @@ function App() {
       id: 3,
       x: 80,
       y: 90,
+      w: 120,
+      h: 100,
       isSelected: false,
       z: 0
     }
   ]);
+  
 
   const currentSelected = coors.find(coor => coor.isSelected) || undefined;
   
@@ -33,24 +45,35 @@ function App() {
   const inputY = useRef(null);
   const inputZ = useRef(null);
 
+  // FUNCTIONS
+  const updateCoors = (id, values, syncValues) => {
+    setCoors(prev => prev.map(coor => {
+      if (coor.id === id) return {...coor, ...values};
+      if (syncValues) return {...coor, ...syncValues};
+      return coor;
+    }))
+  }
 
+
+  // EVENT FUNCTIONS
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputX && inputY){
-      const x = parseFloat(inputX.current.value);
-      const y = parseFloat(inputY.current.value);
+      const x = parseFloat(inputX.current.value)/ratio.x;
+      const y = parseFloat(inputY.current.value)/ratio.y;
       const z = parseFloat(inputZ.current.value);
       if (x && y){
         setCoors(prev => prev.map(coor => (coor.id===currentSelected.id ? {
           ...coor,
           x: x,
           y: y,
-          z: z
+          z: z  
         } : coor)))
       }
     }
   }
-  const changeZValue = (isUp) => {
+  const changeZValue = (event, isUp) => {
+    event.preventDefault();
     let z = parseInt(inputZ.current.value);
     console.log(z);
     if (isUp){
@@ -63,19 +86,13 @@ function App() {
     inputZ.current.value = z;
   }
 
-
+  // USE EFFECTS
   useEffect(() => {
-    // SET VALUE FOR TWO INPUT BOX TO SHOW THE CURRENT POSTION OF AN ELEMENT
-
     if (currentSelected){
-      inputX.current.value = currentSelected?.x || 0;
-      inputY.current.value = currentSelected?.y || 0;
+      inputX.current.value = ((currentSelected?.x || 0)*ratio.x).toFixed(4);
+      inputY.current.value = ((currentSelected?.y || 0)*ratio.y).toFixed(4);
       inputZ.current.value = currentSelected?.z || 0;
     } 
-    // if (inputY) 
-    // document.querySelector(".input1").value = currentSelected?.x || 0;
-    // document.querySelector('.input2').value = currentSelected?.y || 0;
-    // document.querySelector('.input3').value = currentSelected?.z || -1;
   }, [coors])
  
   return (
@@ -84,6 +101,9 @@ function App() {
         <DraggableWhitespace
           coors={coors}
           setCoors={setCoors}
+          coorRatio={coorRatio}
+          setRatio={setRatio}
+          updateCoors = {updateCoors}
         ></DraggableWhitespace>
         {/* Info Board */}
         <div>
@@ -121,8 +141,8 @@ function App() {
                 <label htmlFor="" className="form-label">Z</label>
                 <input ref={inputZ} type="text" className="form-control input3" name='z' readOnly/>
                 <div className='d-flex justify-content-center mt-2'>
-                  <button className="btn btn-primary me-2" onClick={() => changeZValue(true)}>Up</button>
-                  <button className="btn btn-primary" onClick={() => changeZValue(false)}>Down</button>
+                  <div className="btn btn-primary me-2" onClick={(event) => changeZValue(event,true)}>Up</div>
+                  <div className="btn btn-primary" onClick={(event) => changeZValue(event,false)}>Down</div>
                 </div>
                 {/* Submit button */}
                 <button className="btn btn-primary mt-2" type="submit">
@@ -135,13 +155,14 @@ function App() {
       </div>
 
       <button
-        className="btn btn-primary mt-2 d-block"
+        className="btn btn-primary mt-5 d-block"
         onClick={() => {
           console.log(coors);
         }}
       >
         Show x/y
       </button>
+
     </div>
   );
 }
