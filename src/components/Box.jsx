@@ -216,20 +216,15 @@ function Box(props) {
       box.style.setProperty("--top", `${getRef("--top") + dy}px`);
     };
     const onMouseUpTopResize = (event) => {
-      // let newYAbsolute = getRef("--top");
-      // const newY = props.coor.y - (height - props.coor.h);
       props.updateCoors(props.coor.id, {
         h: parseInt(box.style.height.slice(0, -2)),
-        // y: coorRelative(props.coor.x, newYAbsolute).y,
       });
       document.removeEventListener("mousemove", onMouseMoveTopResize);
       document.removeEventListener("mouseup", onMouseUpTopResize);
     };
     const onMouseDownTopResize = (event) => {
       event.stopPropagation();
-      y = event.clientY; // set the mouse position at the time clicked
-      // box.style.left = props.coor.left;
-      // box.style.right = null;
+      y = event.clientY; 
       document.addEventListener("mousemove", onMouseMoveTopResize);
       document.addEventListener("mouseup", onMouseUpTopResize);
     };

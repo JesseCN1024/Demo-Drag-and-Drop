@@ -12,6 +12,8 @@ function App() {
       id: 1,
       x: 0,
       y: 0,
+      dw: 60,
+      dh: 60,
       w: 60,
       h: 50,
       isSelected: false,
@@ -21,6 +23,8 @@ function App() {
       id: 2,
       x: 20,
       y: 20,
+      dw: 60,
+      dh: 60,
       w: 60,
       h: 50,
       isSelected: false,
@@ -30,6 +34,8 @@ function App() {
       id: 3,
       x: 80,
       y: 90,
+      dw: 120,
+      dh: 100,
       w: 120,
       h: 100,
       isSelected: false,
@@ -143,6 +149,12 @@ function App() {
                   <div className="btn btn-primary me-2" onClick={(event) => changeZValue(event,true)}>Up</div>
                   <div className="btn btn-primary" onClick={(event) => changeZValue(event,false)}>Down</div>
                 </div>
+                {/* Width and Height %*/}
+                <label className='mt-2'>Default Width: {currentSelected.dw}px - 100%</label>
+                <input type="text" className="form-control input3" readOnly value={`${currentSelected.w * 100/ currentSelected.dw}%`}/>
+                <label className='mt-2'>Default Height: {currentSelected.dh}px - 100%</label>
+                <input type="text" className="form-control input3" readOnly value={`${currentSelected.h * 100/ currentSelected.dh}%`}/>
+
                 {/* Submit button */}
                 <button className="btn btn-primary mt-2" type="submit">
                   Confirm
