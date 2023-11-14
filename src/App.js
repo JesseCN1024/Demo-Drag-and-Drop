@@ -2,7 +2,6 @@ import React, {componentDidMount} from 'react';
 import './App.css';
 import DraggableWhitespace from './components/Whitespace';
 import { useEffect, useRef, useState } from 'react';
-import Resizable from './components/Resizeable';
 
 function App() {
   // STATES AND VARIABLES

@@ -11,10 +11,3 @@ root.render(
 );
 
 
-// function tracking (event) {
-//   const ratio = window.screen.width / window.screen.height;
-//   const mouseX = event.clientX ;
-//   const mouseY = event.clientY ;
-//   console.log(mouseX, mouseY, window.screen.width, window.devicePixelRatio  );
-// }
-// document.addEventListener('click', (event) => tracking(event))
