@@ -43,9 +43,10 @@ function App() {
     }
   ]);
   
-
+  // Xác định box hiện tại để khi nhấn vào, nó sẽ hinệ thông tin box đó bên hộp bên phải
   const currentSelected = coors.find(coor => coor.isSelected) || undefined;
   
+  // Gọi tới các hộp input bên thanh phải
   const inputX = useRef(null);
   const inputY = useRef(null);
   const inputZ = useRef(null);
@@ -79,7 +80,7 @@ function App() {
       }
     }
   }
-  const changeZValue = (event, isUp) => {
+  const changeZValue = (event, isUp) => { // hàm thay đổi lớp cho box
     event.preventDefault();
     let z = parseInt(inputZ.current.value);
     console.log(z);
@@ -95,6 +96,7 @@ function App() {
 
   // USE EFFECTS
   useEffect(() => {
+    // Khi giá trị x,y,... của một box bị thay đôiỉ do kéo , cập nhật bên thanh bên phải
     if (currentSelected){
       inputX.current.value = ((currentSelected?.x || 0)*ratio.x).toFixed(4);
       inputY.current.value = ((currentSelected?.y || 0)*ratio.y).toFixed(4);
@@ -107,14 +109,16 @@ function App() {
   return (
     <div className="App m-5">
       <div className="d-flex">
+        {/* Whitespace chính */}
         <DraggableWhitespace
           coors={coors}
           setCoors={setCoors}
-          coorRatio={coorRatio}
+          coorRatio={coorRatio} // coorRatio là giá trị tối đa của thanh x và y, ví dụ thanh y là cột điểm có giá trị tối đa là 10
           setRatio={setRatio}
-          updateCoors = {updateCoors}
+          updateCoors = {updateCoors} 
         ></DraggableWhitespace>
-        {/* Info Board */}
+
+        {/* Thanh thông tin bên phải*/}
         <div>
           {/* X, Y Info */}
           <form

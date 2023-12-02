@@ -7,6 +7,7 @@ function Box(props) {
     width: `${props.coor.w}px`,
     height: `${props.coor.h}px`,
   };
+  // Gọi ref các nút resize (4 góc và 4 cạnh)
   const ref = useRef(null);
   const leftResize = useRef(null);
   const rightResize = useRef(null);
@@ -17,7 +18,7 @@ function Box(props) {
   const bottomleftResize = useRef(null);
   const bottomrightResize = useRef(null);
   // FUNCTIONS
-  const wsSize = () => {
+  const wsSize = () => { // hàm trả về kích thước của whitespăc
     const workspace = document.querySelector(".whitespace");
     let rect;
     if (workspace) {
@@ -26,8 +27,8 @@ function Box(props) {
     }
     return { w: 0, h: 0 };
   };
-  // Turn the saved postion into absolute position
-  const coorAbsolute = () => {
+  // Tính giá trị tuyệt đối từ x,y tương đốI trong data để set top, left position absolute cho obj
+  const coorAbsolute = () => { // 
     if (wsSize().w && wsSize().h) {
       const xAbsolute = props.coor.x;
       const yAbsolute = wsSize().h - props.coor.h - props.coor.y;
@@ -35,7 +36,7 @@ function Box(props) {
     }
     return { x: 0, y: 0 };
   };
-  // Turn the new absolute pos into saved relative pos
+  // Tính giá trị tương đối từ tuyệt đối và lưu vào state
   const coorRelative = (x, y, h) => {
     // x, y is the absolute x,y passed in
     if (wsSize().w && wsSize().h) {
@@ -45,6 +46,7 @@ function Box(props) {
     }
     return { x: 0, y: 0 };
   };
+  // Láy dữ liệu các thuột ính left và top từ obj
   const getRef = (s) => {
     if (["--left", "--top"].includes(s)) {
       return parseFloat(ref.current.style.getPropertyValue(s).slice(0, -2));
@@ -52,26 +54,28 @@ function Box(props) {
     return 0;
   };
 
-  // EVENT FUNCTIONS-------
 
 
 
   // USE EFFECTS
+  // USE Effect xử lý sự kiện kéo thả
   useEffect(() => {
     // Select the box
-    let startMouseX, startMouseY;
-    let startX, startY;
+    let startMouseX, startMouseY; // vị trí hiện tại của mouse
+    let startX, startY; // giá trị left và top hiện tại
+    // Thứ tự xem là Down -> Move -> Up (kéo xuống)
     const handleMouseMove = (e) => {
       let dx, dy;
       // New position of element
       dx = e.clientX - startMouseX + startX;
       dy = e.clientY - startMouseY + startY;
-      // Update element position
+      // Update element position (cập nhật liên tục khi chuột dchuyển)
       ref.current.style.setProperty("--left", `${dx}px`);
       ref.current.style.setProperty("--top", `${dy}px`);
     };
     // When user loosen the pointer
     const handleMouseUp = () => {
+      // KHi nhả chuọt ra thfi cập nhật vào state
       // Clean up event listeners
       ref.current.classList.remove("box-selected");
       document.removeEventListener("mousemove", handleMouseMove);
@@ -118,6 +122,8 @@ function Box(props) {
     ref.current.style.setProperty("--top", `${coorAbsolute().y}px`);
   }, [props.coor]);
 
+
+  // USE EFFECT xử lý sự kiện resize
   useEffect(() => {
     // handling resizing boxes
     // Return is there isnt any box selected
@@ -138,11 +144,14 @@ function Box(props) {
     let width = props.coor.w;
     let height = props.coor.h;
 
+    // Mỗi cái resize cạnh sẽ có listener down, move và up riêng biệt
+    // còn các resize góc chỉ sử dụng lại cạnh (ví dụ góc trái trên cùng thì sử dụng
+    // lại listener của các cạnh trên và trái)
     // Right resize
     const onMouseMoveRightResize = (event) => {
       const dx = event.clientX - x;
       x = event.clientX;
-      width += dx;
+      width += dx; // thay đổi và cập nhật width
       box.style.width = `${width}px`;
     };
     const onMouseUpRightResize = (event) => {
@@ -270,6 +279,7 @@ function Box(props) {
       style={style}
     >
       Drag Me {props.coor.id}
+      {/* Box nào được chọn thì mói hiện resizers, các resizer bên dưới cần css theo như trong index.css mẫu*/}
       {props.coor.isSelected && (
         <>
           {/* Bar resizer */}
